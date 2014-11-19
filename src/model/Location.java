@@ -13,9 +13,10 @@ import java.io.Serializable;
  * @author Paul
  */
 public class Location implements Serializable {
-    private String startLocation,endLocation;
+    private String startLocation,endLocation,locationID;
     
-    public Location(String startLocation,String endLocation) {
+    public Location(String locationID,String startLocation,String endLocation) {
+        this.locationID = locationID;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
     }
@@ -34,5 +35,13 @@ public class Location implements Serializable {
 
     public void setEndLocation(String endLocation) {
         this.endLocation = endLocation;
+    }
+
+    public String getLocationID() {
+        return locationID;
+    }
+
+    public void setLocationID(String locationID) {
+        this.locationID = locationID;
     }
 }

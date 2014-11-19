@@ -1,10 +1,15 @@
 package ferrycontrol;
 
 import contract.IContract;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.DummyPersistance;
 import model.Ferry;
+import model.Location;
+import model.Trip;
 
 public class Controller implements IContract {
     
@@ -12,7 +17,11 @@ public class Controller implements IContract {
     ArrayList<Ferry> ferries;
     public Controller()
     {
-        dp = new DummyPersistance();
+        try {
+            dp = new DummyPersistance();
+        } catch (ParseException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
             
 
@@ -65,24 +74,21 @@ public class Controller implements IContract {
 
     @Override
     public boolean deleteFerry(String ferryID) {
-        ferries = dp.getFerries();
-        int currentSize = ferries.size();
-        
-        for(Ferry f : ferries)
+        Ferry toDelete = null;
+        for(Ferry f : dp.getFerries())
         {
             String id = f.getFerryID();
             if(id.equals(ferryID))
             {
-                ferries.remove(f);
+                toDelete = f;
             }
         }
-        
-        if(ferries.size() < currentSize)
+        if (toDelete!=null)
         {
+            dp.removeFerry(toDelete);
             return true;
         }
-        else
-            return false;
+        else return false;
     }
 
     @Override
@@ -104,20 +110,20 @@ public class Controller implements IContract {
     @Override
     public boolean updateFerry(String ferryID, int seats, String type) {
         ferries = dp.getFerries();
-        int currentSize = ferries.size();
-        Ferry updatedFerry = new Ferry(ferryID, seats, type);
+        Ferry updatedFerry = null,oldFerry=null;
         for(Ferry f : ferries)
         {
             String id = f.getFerryID();
             if(id.equals(ferryID))
             {
-                ferries.remove(f);
-                ferries.add(updatedFerry);
+                updatedFerry = new Ferry(ferryID, seats, type);
+                oldFerry = f;
             }
         }
-        
-        if(currentSize == ferries.size())
+        if(updatedFerry != null)
         {
+            dp.removeFerry(oldFerry);
+            dp.addFerry(updatedFerry);
             return true;
         }
         else
@@ -146,12 +152,45 @@ public class Controller implements IContract {
 
     @Override
     public boolean addTrip(String ferryID, String locationID) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        Ferry tripFerry = null;
+        Location tripLocation = null;
+        for (Ferry f:dp.getFerries())
+        {
+            if (ferryID.equals(f.getFerryID())) {
+                tripFerry =f;
+            }
+        }
+        for (Location l:dp.getLocations()) {
+            if (locationID.equals(l.getLocationID())) {
+                tripLocation = l;
+            }
+        }
+        String lastTripId;
+        if (dp.getTrips().size()!=0)
+            lastTripId = dp.getTrips().get(dp.getTrips().size()-1).getTripID();
+        else lastTripId = "1";
+        int newId = Integer.parseInt(lastTripId)+1;
+        if (tripLocation!=null && tripFerry!=null) {
+            dp.addTrip(new Trip(Integer.toString(newId),tripFerry,tripLocation));
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
     public boolean deleteTrip(String tripID) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        Trip toDelete = null;
+        for (Trip t: dp.getTrips()) {
+            if(tripID.equals(t.getTripID()))
+                toDelete = t;
+        }
+        if (toDelete!=null) {
+            dp.removeTrip(toDelete);
+            return true;
+        }
+        else return false;
     }
 
     @Override

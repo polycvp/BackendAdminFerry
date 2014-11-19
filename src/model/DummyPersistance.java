@@ -24,9 +24,12 @@ public class DummyPersistance {
         ferries.add(new Ferry("3", 200, "Large"));
         
         locations = new ArrayList<Location>();
-        locations.add(new Location("Land", "Small Island"));
-        locations.add(new Location("Land", "Large Island"));
-        locations.add(new Location("Small Island","Large Island"));
+        locations.add(new Location("1","Land", "Small Island"));
+        locations.add(new Location("2","Land", "Large Island"));
+        locations.add(new Location("3","Small Island","Large Island"));
+        locations.add(new Location("4","Small Island","Land"));
+        locations.add(new Location("5","Large Island","Land"));
+        locations.add(new Location("6","Large Island","Small Island"));
         
         trips = new ArrayList<Trip>();
         trips.add(new Trip("1", ferries.get(0), locations.get(0)));
@@ -47,7 +50,32 @@ public class DummyPersistance {
         schedules.add(new Schedule("3", format.parse("12/03/2015"), trips));
         schedules.add(new Schedule("4", format.parse("05/12/2014"), trips));
     }
-
+    
+    public void removeFerry(Ferry f) {
+       if (ferries.contains(f))
+       {
+           ferries.remove(f);
+       }
+    }
+    
+    public void addFerry(Ferry f) {
+        if (!ferries.contains(f)) {
+            ferries.add(f);
+        }
+    }
+    
+    public void addTrip(Trip t) {
+        if (!trips.contains(t)) {
+            trips.add(t);
+        }
+    }
+    
+    public void removeTrip(Trip t) {
+        if (trips.contains(t)) {
+            trips.remove(t);
+        }
+    }
+    
     public ArrayList<Ferry> getFerries() {
         return ferries;
     }

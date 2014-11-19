@@ -35,7 +35,7 @@ public class BackendAdminFerry {
             System.out.println("Ferry 1 deleted. Press any key to continue.");
         else System.out.println("An error occured. Press any key to continue.");
         System.in.read();
-        boolean addTrip = c.addTrip("1", "land");
+        boolean addTrip = c.addTrip("3", "2");
         if (addTrip)
             System.out.println("Trip 1 added. Press any key to continue.");
         else System.out.println("An error occured. Press any key to continue.");
