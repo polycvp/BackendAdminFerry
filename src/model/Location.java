@@ -6,10 +6,33 @@
 
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Paul
  */
-public class Location {
+public class Location implements Serializable {
+    private String startLocation,endLocation;
     
+    public Location(String startLocation,String endLocation) {
+        this.startLocation = startLocation;
+        this.endLocation = endLocation;
+    }
+
+    public String getStartLocation() {
+        return startLocation;
+    }
+
+    public void setStartLocation(String startLocation) {
+        this.startLocation = startLocation;
+    }
+
+    public String getEndLocation() {
+        return endLocation;
+    }
+
+    public void setEndLocation(String endLocation) {
+        this.endLocation = endLocation;
+    }
 }
